@@ -133,6 +133,8 @@ exports.buscarUsuario = async (req, res) => {
 
 exports.registrarUsuario = async (req, res) => {
 
+    console.log("BODY COMPLETO:", req.body);
+
     const {
         nombre,
         apellidoP,
@@ -211,17 +213,9 @@ exports.registrarUsuario = async (req, res) => {
 
 exports.actualizarUsuario = async (req, res) => {
 
-    const { id_usuario } = req.params;
+    console.log("BODY UPDATE:", req.body);
 
-    const {
-        nombre,
-        apellidoP,
-        apellidoM,
-        telefono,
-        contrasenia,
-        rol,
-        privilegios
-    } = req.body;
+    const { id_usuario } = req.params;
 
     try {
 
