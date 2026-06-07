@@ -59,11 +59,12 @@ exports.listarUsuarios = async (req, res) => {
             SELECT
                 id_usuario,
                 nombre,
-                apellidoP,
-                apellidoM,
+                apellidop,
+                apellidom,
                 contraseña,
                 rol,
-                telefono
+                telefono,
+                privilegios
             FROM usuario
         `;
 
@@ -95,11 +96,12 @@ exports.buscarUsuario = async (req, res) => {
             SELECT
                 id_usuario,
                 nombre,
-                apellidoP,
-                apellidoM,
+                apellidop,
+                apellidom,
                 telefono,
                 contraseña,
-                rol
+                rol,
+                privilegios
             FROM usuario
             WHERE telefono = $1
         `;
@@ -140,12 +142,12 @@ exports.registrarUsuario = async (req, res) => {
         apellidoM,
         telefono,
         contrasenia,
-        rol
+        rol,
+        privilegios
     } = req.body;
 
     try {
 
-        // VALIDAR TELÉFONO DUPLICADO
         const validacion = await db.query(
             `
             SELECT id_usuario
@@ -164,21 +166,19 @@ exports.registrarUsuario = async (req, res) => {
 
         }
 
-        // INSERTAR USUARIO
         const query = `
             INSERT INTO usuario
             (
                 nombre,
-                apellidoP,
-                apellidoM,
+                apellidop,
+                apellidom,
                 telefono,
                 contraseña,
-                rol
+                rol,
+                privilegios
             )
-
             VALUES
-            ($1, $2, $3, $4, $5, $6)
-
+            ($1,$2,$3,$4,$5,$6,$7)
             RETURNING id_usuario
         `;
 
@@ -188,7 +188,8 @@ exports.registrarUsuario = async (req, res) => {
             apellidoM,
             telefono,
             contrasenia,
-            rol
+            rol,
+            privilegios || {}
         ]);
 
         return res.json({
@@ -222,22 +223,22 @@ exports.actualizarUsuario = async (req, res) => {
         apellidoM,
         telefono,
         contrasenia,
-        rol
+        rol,
+        privilegios
     } = req.body;
 
     try {
 
         const query = `
             UPDATE usuario SET
-
                 nombre = $1,
-                apellidoP = $2,
-                apellidoM = $3,
+                apellidop = $2,
+                apellidom = $3,
                 telefono = $4,
                 contraseña = $5,
-                rol = $6
-
-            WHERE id_usuario = $7
+                rol = $6,
+                privilegios = $7
+            WHERE id_usuario = $8
         `;
 
         await db.query(query, [
@@ -247,6 +248,7 @@ exports.actualizarUsuario = async (req, res) => {
             telefono,
             contrasenia,
             rol,
+            privilegios || {},
             id_usuario
         ]);
 
