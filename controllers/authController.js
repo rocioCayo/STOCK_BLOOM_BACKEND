@@ -23,9 +23,18 @@ exports.login = async (req, res) => {
 
         if (result.rows.length > 0) {
 
+            // OBTENER USUARIO
+            const usuario = result.rows[0];
+
+            // CONVERTIR PRIVILEGIOS DE STRING A OBJETO
+            usuario.privilegios = JSON.parse(
+                usuario.privilegios || '{}'
+            );
+
+            // RESPUESTA
             res.json({
                 success: true,
-                usuario: result.rows[0]
+                usuario
             });
 
         } else {
@@ -47,7 +56,6 @@ exports.login = async (req, res) => {
 
     }
 };
-
 // =====================================================
 // LISTAR USUARIOS
 // =====================================================
