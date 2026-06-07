@@ -16,6 +16,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use((req, res, next) => {
+    console.log("================================");
+    console.log(req.method, req.url);
+    console.log("BODY:", req.body);
+    console.log("================================");
+    next();
+});
 // ===============================
 // CONEXIÓN A POSTGRESQL
 // ===============================
