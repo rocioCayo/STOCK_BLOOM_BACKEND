@@ -131,9 +131,6 @@ exports.buscarUsuario = async (req, res) => {
     }
 };
 
-// =====================================================
-// REGISTRAR USUARIO
-// =====================================================
 exports.registrarUsuario = async (req, res) => {
 
     const {
@@ -147,6 +144,8 @@ exports.registrarUsuario = async (req, res) => {
     } = req.body;
 
     try {
+
+        console.log("PRIVILEGIOS RECIBIDOS:", privilegios);
 
         const validacion = await db.query(
             `
@@ -189,7 +188,7 @@ exports.registrarUsuario = async (req, res) => {
             telefono,
             contrasenia,
             rol,
-            privilegios || {}
+            JSON.stringify(privilegios || {})
         ]);
 
         return res.json({
@@ -210,9 +209,6 @@ exports.registrarUsuario = async (req, res) => {
     }
 };
 
-// =====================================================
-// ACTUALIZAR USUARIO
-// =====================================================
 exports.actualizarUsuario = async (req, res) => {
 
     const { id_usuario } = req.params;
@@ -228,6 +224,8 @@ exports.actualizarUsuario = async (req, res) => {
     } = req.body;
 
     try {
+
+        console.log("PRIVILEGIOS ACTUALIZAR:", privilegios);
 
         const query = `
             UPDATE usuario SET
@@ -248,7 +246,7 @@ exports.actualizarUsuario = async (req, res) => {
             telefono,
             contrasenia,
             rol,
-            privilegios || {},
+            JSON.stringify(privilegios || {}),
             id_usuario
         ]);
 
